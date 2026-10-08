@@ -41,6 +41,38 @@ const TOC = [...PUBLIC_TOC, ...PROTECTED_TOC];
 
 type Stage = "email" | "public" | "signed";
 
+const NDA_IDENTITY_KEY = "e3-nda-identity";
+
+interface NdaIdentity {
+  name: string;
+  email: string;
+  at: string;
+}
+
+function readStoredNdaIdentity(): NdaIdentity | null {
+  try {
+    const raw = localStorage.getItem(NDA_IDENTITY_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<NdaIdentity>;
+    if (typeof parsed.email !== "string" || !parsed.email.includes("@")) return null;
+    return {
+      name: typeof parsed.name === "string" ? parsed.name : "",
+      email: parsed.email,
+      at: typeof parsed.at === "string" ? parsed.at : "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function storeNdaIdentity(identity: NdaIdentity) {
+  try {
+    localStorage.setItem(NDA_IDENTITY_KEY, JSON.stringify(identity));
+  } catch {
+    // storage unavailable (private mode etc.) — session-only fallback
+  }
+}
+
 function Index() {
   const navigate = useNavigate();
   const [ackOpen, setAckOpen] = useState(false);
@@ -51,6 +83,7 @@ function Index() {
   const [stage, setStage] = useState<Stage>("email");
   const [knownEmail, setKnownEmail] = useState("");
   const [knownName, setKnownName] = useState("");
+  const [identityRestoring, setIdentityRestoring] = useState(true);
   const [seenGated, setSeenGated] = useState<Set<string>>(new Set());
   const submit = useServerFn(submitParticipation);
   const lookup = useServerFn(lookupParticipant);
@@ -66,9 +99,57 @@ function Index() {
   const allGatedSeen = seenGated.size >= PROTECTED_TOC.length;
 
   useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      // 1) Returning signer on this browser — bypass email-gate + NDA entirely.
+      const stored = readStoredNdaIdentity();
+      if (stored) {
+        setAck({ name: stored.name || "Authorized Reader", email: stored.email });
+        setKnownEmail(stored.email);
+        setKnownName(stored.name);
+        setStage("signed");
+        setIdentityRestoring(false);
+        return;
+      }
+      // 2) Signed-in console user — re-verify NDA server-side, then bypass.
+      try {
+        const { data } = await supabase.auth.getUser();
+        const authedEmail = data.user?.email;
+        if (authedEmail) {
+          const res = await lookup({ data: { email: authedEmail } });
+          if (!cancelled && res.found) {
+            const identity = {
+              name: res.name ?? "Authorized Reader",
+              email: authedEmail,
+              at: new Date().toISOString(),
+            };
+            storeNdaIdentity(identity);
+            setAck({ name: identity.name, email: identity.email });
+            setKnownEmail(identity.email);
+            setKnownName(identity.name);
+            setStage("signed");
+          }
+        }
+      } catch (err) {
+        console.error("[nda-identity] restore failed", err);
+      } finally {
+        if (!cancelled) setIdentityRestoring(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [lookup]);
+
+  useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
         setAck(null);
+        try {
+          localStorage.removeItem(NDA_IDENTITY_KEY);
+        } catch {
+          // ignore
+        }
       }
     });
     return () => {
@@ -140,7 +221,9 @@ function Index() {
         setKnownEmail(trimmed);
         if (res.name) setKnownName(res.name);
         if (res.found) {
-          setAck({ name: res.name ?? "Authorized Reader", email: trimmed });
+          const name = res.name ?? "Authorized Reader";
+          setAck({ name, email: trimmed });
+          storeNdaIdentity({ name, email: trimmed, at: new Date().toISOString() });
           setStage("signed");
         } else {
           setStage("public");
@@ -154,9 +237,14 @@ function Index() {
     [lookup],
   );
 
-  const enterPlatform = useCallback(() => {
-    navigate({ to: "/console" });
-  }, [navigate]);
+  const enterPlatform = useCallback(async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      navigate({ to: "/console" });
+    } else {
+      navigate({ to: "/auth", search: { email: knownEmail || ack?.email || "" } });
+    }
+  }, [navigate, knownEmail, ack]);
 
   return (
     <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-background text-ink [overflow-anchor:none]">
@@ -202,7 +290,7 @@ function Index() {
         />
       </main>
 
-      {stage === "email" && <EmailGate onResolved={handleEmailResolved} />}
+      {stage === "email" && !identityRestoring && <EmailGate onResolved={handleEmailResolved} />}
 
       {ackOpen && (
         <AckDialog
@@ -215,6 +303,7 @@ function Index() {
               setAck({ name: v.name, email: v.email });
               setKnownEmail(v.email);
               setKnownName(v.name);
+              storeNdaIdentity({ name: v.name, email: v.email, at: new Date().toISOString() });
               setStage("signed");
               setAckOpen(false);
             } catch (e) {
