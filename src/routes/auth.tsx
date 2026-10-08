@@ -17,7 +17,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/admin" });
+      if (data.user) navigate({ to: "/console" });
     });
   }, [navigate]);
 
@@ -33,11 +33,11 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email: email.trim().toLowerCase(),
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
+          options: { emailRedirectTo: `${window.location.origin}/console` },
         });
         if (error) throw error;
       }
-      navigate({ to: "/admin" });
+      navigate({ to: "/console" });
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Authentication failed");
     } finally {
@@ -52,10 +52,10 @@ function AuthPage() {
           {"\u2190"} Back to document
         </Link>
         <h1 className="mt-4 text-[22px] font-medium tracking-tight text-neutral-900">
-          Admin {mode === "signin" ? "Sign In" : "Sign Up"}
+          Platform {mode === "signin" ? "Sign In" : "Sign Up"}
         </h1>
         <p className="mt-1 text-[13px] text-neutral-500">
-          Restricted access. Participation registry.
+          Restricted access. ELAS-3-CITY platform console.
         </p>
 
         <form onSubmit={submit} className="mt-6 space-y-4">

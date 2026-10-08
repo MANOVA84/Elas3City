@@ -155,7 +155,7 @@ function Index() {
   );
 
   const enterPlatform = useCallback(() => {
-    navigate({ to: "/admin" });
+    navigate({ to: "/console" });
   }, [navigate]);
 
   return (
