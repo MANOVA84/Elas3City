@@ -81,10 +81,10 @@ function ConsolePage() {
           <div className="flex items-center gap-4">
             <span className="hidden font-mono text-[10px] text-neutral-500 sm:inline">{email}</span>
             <Link
-              to="/admin"
+              to="/console"
               className="border border-neutral-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] text-neutral-600 hover:bg-neutral-100"
             >
-              Admin
+              Console
             </Link>
             <button
               onClick={async () => {
