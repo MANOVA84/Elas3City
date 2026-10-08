@@ -1,6 +1,28 @@
-import { createFileRoute, redirect, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  LayoutDashboard,
+  Database,
+  FileCheck2,
+  Workflow,
+  Rocket,
+  ScrollText,
+  ShieldCheck,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  Globe,
+  Leaf,
+  Factory,
+  Droplets,
+  Zap,
+  Users,
+  AlertTriangle,
+  Target,
+  LineChart,
+  FileText,
+} from "lucide-react";
 
 export const Route = createFileRoute("/console")({
   ssr: false,
@@ -10,6 +32,63 @@ export const Route = createFileRoute("/console")({
   },
   component: ConsolePage,
 });
+
+type LucideIcon = React.ComponentType<{ className?: string }>;
+
+interface NavItem {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  kind: "scroll" | "route";
+  to?: "/nda" | "/admin";
+  badge?: string;
+}
+
+interface NavGroup {
+  heading: string;
+  items: NavItem[];
+}
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    heading: "Overview",
+    items: [
+      { id: "dashboard", label: "Command Deck", icon: LayoutDashboard, kind: "scroll" },
+      { id: "barbados", label: "Barbados Pilot", icon: Globe, kind: "scroll", badge: "LIVE" },
+    ],
+  },
+  {
+    heading: "Delivery · 5 Phases",
+    items: [
+      { id: "foundation", label: "I · Foundation Locks", icon: ScrollText, kind: "scroll" },
+      { id: "technical", label: "II · Technical Build", icon: Database, kind: "scroll" },
+      { id: "governance", label: "III · Governance & NEXUS", icon: ShieldCheck, kind: "scroll" },
+      { id: "deployment", label: "IV · Deployment", icon: Rocket, kind: "scroll" },
+      { id: "advanced", label: "V · Advanced & Loop", icon: Workflow, kind: "scroll" },
+    ],
+  },
+  {
+    heading: "Control Towers",
+    items: [
+      { id: "tower-executive", label: "Executive", icon: Target, kind: "scroll" },
+      { id: "tower-supply", label: "Supply Chain", icon: Factory, kind: "scroll" },
+      { id: "tower-utilities", label: "Utilities", icon: Zap, kind: "scroll" },
+      { id: "tower-water", label: "Water & Compute", icon: Droplets, kind: "scroll" },
+      { id: "tower-climate", label: "Climate / Nature", icon: Leaf, kind: "scroll" },
+      { id: "tower-risk", label: "Risk / Resilience", icon: AlertTriangle, kind: "scroll" },
+    ],
+  },
+  {
+    heading: "Assurance",
+    items: [
+      { id: "mrv", label: "MRV & BTR", icon: LineChart, kind: "scroll" },
+      { id: "nda", label: "NDA Registry", icon: FileCheck2, kind: "route", to: "/nda" },
+      { id: "evidence", label: "Evidence & Reports", icon: FileText, kind: "scroll" },
+      { id: "people", label: "People & Partners", icon: Users, kind: "scroll" },
+      { id: "admin", label: "Administration", icon: ShieldCheck, kind: "route", to: "/admin" },
+    ],
+  },
+];
 
 const PHASES = [
   {
