@@ -134,91 +134,44 @@ const PHASES = [
 ];
 
 function ConsolePage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
+  const [active, setActive] = useState("dashboard");
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""));
   }, []);
 
+  const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
+    try {
+      localStorage.removeItem("e3-nda-identity");
+    } catch {
+      // ignore
+    }
+    navigate({ to: "/", replace: true });
+  }, [navigate]);
+
+  const scrollTo = useCallback((id: string) => {
+    setActive(id);
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
+  const initials = useMemo(() => {
+    if (!email) return "··";
+    return email
+      .split("@")[0]
+      .split(/[._-]/)
+      .map((p) => p[0]?.toUpperCase())
+      .join("")
+      .slice(0, 2);
+  }, [email]);
+
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-sm border border-emerald-600/60 bg-emerald-600/10">
-              <span className="font-serif text-xl italic text-emerald-700">E3</span>
-            </div>
-            <div>
-              <div className="font-mono text-[11px] tracking-[0.22em] text-neutral-600">
-                ELAS-3-CITY PLATFORM
-              </div>
-              <div className="font-mono text-[9px] tracking-[0.18em] text-neutral-400">
-                V4.0 · SECTION 2245 · 953 LOCKS
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden font-mono text-[10px] text-neutral-500 sm:inline">{email}</span>
-            <Link
-              to="/console"
-              className="border border-neutral-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] text-neutral-600 hover:bg-neutral-100"
-            >
-              Console
-            </Link>
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/";
-              }}
-              className="border border-neutral-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] text-neutral-600 hover:bg-neutral-100"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <section className="border-b border-neutral-200 bg-gradient-to-b from-emerald-50 to-neutral-50">
-        <div className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-emerald-700">
-            Clearance Verified · Full Platform Access
-          </div>
-          <h1 className="mt-3 text-[32px] font-medium leading-tight tracking-tight text-neutral-900 sm:text-[44px]">
-            ELAS-3-CITY Console
-          </h1>
-          <p className="mt-4 max-w-[70ch] text-[15px] leading-relaxed text-neutral-600">
-            The complete five-phase platform build. All 13 edge functions deployed and operational —
-            data federation, KPI measurement, GHG Scope 3, governance, NEXUS orchestration and the
-            20-iteration workflow loop. Architecture locks preserved under R1_BASELINE.
-          </p>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Stat k="Phases" v="5" sub="Foundation → Advanced" />
-            <Stat k="Edge Functions" v="13" sub="All ACTIVE" />
-            <Stat k="Architecture Locks" v="953" sub="Section 2245" />
-            <Stat k="Compliance" v="100%" sub="R1_BASELINE preserved" />
-          </div>
-        </div>
-      </section>
-
-      <main className="mx-auto max-w-[1400px] px-4 py-10 sm:px-6">
-        {PHASES.map((phase) => (
-          <PhaseSection key={phase.id} phase={phase} />
-        ))}
-      </main>
-
-      <footer className="border-t border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-6 sm:px-6">
-          <span className="font-mono text-[10px] text-neutral-400">
-            ELAS-3-CITY · V4.0 · ANOVA · R1_BASELINE
-          </span>
-          <span className="font-mono text-[10px] text-neutral-400">
-            953 LOCKS · SECTION 2245 · PRESERVED
-          </span>
-        </div>
-      </footer>
-    </div>
-  );
-}
+    <div className="e3-app flex min-h-screen">
 function Stat({ k, v, sub }: { k: string; v: string; sub: string }) {
   return (
     <div className="border border-neutral-200 bg-white p-4">
