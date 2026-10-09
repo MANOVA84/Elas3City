@@ -48,6 +48,12 @@ import {
   Network,
   FlaskConical,
   Layers,
+  Smartphone,
+  Sun,
+  Scale,
+  BrainCircuit,
+  Calculator,
+  Award,
 } from "lucide-react";
 
 export const Route = createFileRoute("/console")({
@@ -220,19 +226,29 @@ const WIRE_LAYERS: WireLayer[] = [
     color: "text-slate-500",
     groups: [
       {
-        name: "Government & Organisations",
+        name: "Government / Public Sector",
         icon: Landmark,
         color: "sky",
         items: [
+          { icon: ScrollText, label: "Policy & planning", note: "Statutory remit & mandates." },
+          { icon: ShieldCheck, label: "Regulation", note: "Compliance oversight." },
+          { icon: FileText, label: "Reporting & SDG alignment", note: "BTR / indicator outputs." },
+        ],
+      },
+      {
+        name: "Businesses / Organisations",
+        icon: Building2,
+        color: "teal",
+        items: [
           {
-            icon: Users,
-            label: "Ministries & agencies",
-            note: "Statutory leads accountable for reporting.",
+            icon: Activity,
+            label: "Operations & compliance",
+            note: "Day-to-day accountabilities.",
           },
           {
-            icon: Building2,
-            label: "Municipal operators",
-            note: "City services & utility coordination.",
+            icon: BarChart3,
+            label: "Value creation & ESG reporting",
+            note: "Performance & disclosure.",
           },
         ],
       },
@@ -241,21 +257,18 @@ const WIRE_LAYERS: WireLayer[] = [
         icon: Users,
         color: "emerald",
         items: [
-          { icon: Users, label: "Resident pods", note: "Neighbourhood-level inputs & feedback." },
-          {
-            icon: Network,
-            label: "DAO coordinators",
-            note: "Representative voting & attestation.",
-          },
+          { icon: Users, label: "Participation & local projects", note: "Neighbourhood inputs." },
+          { icon: Leaf, label: "Incentives & benefits", note: "Shared-value distribution." },
         ],
       },
       {
-        name: "Partners & Utilities",
+        name: "Partners & Service Providers",
         icon: Handshake,
-        color: "teal",
+        color: "violet",
         items: [
-          { icon: Zap, label: "Utility partners", note: "Energy, water & telecom operators." },
-          { icon: Truck, label: "Logistics & suppliers", note: "Scope 3A / 3B event sources." },
+          { icon: Truck, label: "Suppliers & operators", note: "Scope 3A / 3B event sources." },
+          { icon: Zap, label: "Utilities & investors", note: "Energy, water & telecom." },
+          { icon: FlaskConical, label: "Research & NGOs", note: "Method & advocacy inputs." },
         ],
       },
       {
@@ -263,12 +276,12 @@ const WIRE_LAYERS: WireLayer[] = [
         icon: ShieldCheck,
         color: "amber",
         items: [
+          { icon: Scale, label: "Regulators & auditors", note: "Read-mostly, lineage-tracked." },
           {
-            icon: FileCheck2,
-            label: "Assurance reviewers",
-            note: "Independent verification of evidence.",
+            icon: Award,
+            label: "Verifiers & certification schemes",
+            note: "Independent attestation.",
           },
-          { icon: Eye, label: "Auditors", note: "Read-mostly, fully lineage-tracked." },
         ],
       },
     ],
@@ -323,6 +336,20 @@ const WIRE_LAYERS: WireLayer[] = [
         items: [
           { icon: FileText, label: "Reports", note: "BTR / SDG indicator outputs." },
           { icon: ScrollText, label: "Evidence views", note: "Traceable, provenance-linked." },
+        ],
+      },
+      {
+        name: "Mobile & Field Access",
+        icon: Smartphone,
+        color: "rose",
+        items: [
+          { icon: Smartphone, label: "Field capture", note: "Offline-tolerant data entry." },
+          {
+            icon: FileCheck2,
+            label: "Inspections & asset scans",
+            note: "Verifiable on-site records.",
+          },
+          { icon: Users, label: "Community engagement", note: "Local reporting & feedback." },
         ],
       },
     ],
@@ -426,17 +453,29 @@ const WIRE_LAYERS: WireLayer[] = [
         ],
       },
       {
-        name: "Utilities",
+        name: "Utilities — Energy, Water & Telecommunications",
         icon: Zap,
         color: "teal",
         items: [
-          { icon: Zap, label: "Energy", note: "Consumption & carbon intensity." },
-          { icon: Droplets, label: "Water & sanitation", note: "Withdrawal & quality events." },
-          { icon: Radio, label: "Telecommunications", note: "Network & connectivity." },
           {
-            icon: Gauge,
-            label: "Metering & consumption evidence",
-            note: "Metered, validated data.",
+            icon: Zap,
+            label: "Energy (All Sources)",
+            note: "Electricity · Natural Gas · Other Fuels (diesel/LPG/petrol).",
+          },
+          {
+            icon: Droplets,
+            label: "Water & Sanitation",
+            note: "Abstraction · treatment · distribution · usage · wastewater.",
+          },
+          {
+            icon: Radio,
+            label: "Telecommunications",
+            note: "Networks · infrastructure · data usage · device lifecycle.",
+          },
+          {
+            icon: Sun,
+            label: "Renewable Energy",
+            note: "Solar · wind · biomass · other.",
           },
         ],
       },
@@ -462,6 +501,18 @@ const WIRE_LAYERS: WireLayer[] = [
         color: "emerald",
         items: [
           { icon: FlaskConical, label: "MSVS", note: "Method → variable → KPI traceability." },
+        ],
+      },
+      {
+        name: "Methodology → Variable → KPI",
+        icon: Calculator,
+        color: "violet",
+        items: [
+          {
+            icon: Calculator,
+            label: "Traceability chain",
+            note: "Methodology · units · calculations · Scopes 1/2/3/3B · versioning.",
+          },
         ],
       },
       {
@@ -493,33 +544,67 @@ const WIRE_LAYERS: WireLayer[] = [
     eyebrow: "NEXUS",
     title: "Governed Measurement & Intelligence Layer",
     intro:
-      "NEXUS measures, explains, validates and proposes — but never independently authorises actions. Execution remains subject to ELAS identity, policy, evidence and approval controls.",
+      "NEXUS measures, explains, validates, intervenes and reports — but never independently authorises actions. Execution remains subject to ELAS-3 identity, policy, evidence and approval controls.",
     color: "text-violet-400",
     groups: [
       {
-        name: "Core Loop",
+        name: "Measure",
         icon: FlaskConical,
         color: "violet",
         items: [
           {
             icon: Activity,
-            label: "Measure · Explain · Validate",
-            note: "Interpret the evidence.",
+            label: "Collect · process · calculate",
+            note: "Real-time · periodic · scenarios.",
           },
-          { icon: Network, label: "Interactions & synergies", note: "Cross-pillar trade-offs." },
         ],
       },
       {
-        name: "Recommendations",
-        icon: Target,
+        name: "Explain",
+        icon: Network,
         color: "sky",
         items: [
           {
-            icon: BarChart3,
-            label: "Scenarios & recommendations",
-            note: "Costed, evidence-linked options.",
+            icon: Network,
+            label: "Insights · drivers · trade-offs",
+            note: "Why the numbers move.",
           },
-          { icon: FileCheck2, label: "Evidence-linked outputs", note: "Each output is auditable." },
+        ],
+      },
+      {
+        name: "Validate",
+        icon: ShieldCheck,
+        color: "emerald",
+        items: [
+          {
+            icon: FileCheck2,
+            label: "Evidence check · confidence",
+            note: "Rules · methodology compliance.",
+          },
+        ],
+      },
+      {
+        name: "Intervene",
+        icon: Target,
+        color: "amber",
+        items: [
+          {
+            icon: BarChart3,
+            label: "Recommendations & options",
+            note: "Costed scenarios for approval.",
+          },
+        ],
+      },
+      {
+        name: "Evidence-Linked Outputs",
+        icon: FileText,
+        color: "teal",
+        items: [
+          {
+            icon: FileText,
+            label: "Dashboards · reports · API",
+            note: "Decision support & monitoring alerts.",
+          },
         ],
       },
     ],
@@ -571,13 +656,43 @@ const WIRE_LAYERS: WireLayer[] = [
 ];
 
 const CONTROL_LIST = [
-  { icon: Lock, label: "Identity & Least Privilege", note: "Role-scoped access everywhere." },
-  { icon: ShieldCheck, label: "Privacy & Data Governance", note: "Lawful, minimised, consented." },
-  { icon: Eye, label: "Cybersecurity / Zero Trust", note: "Never trust, always verify." },
-  { icon: ScrollText, label: "Auditability & Evidence", note: "Immutable, traceable records." },
-  { icon: Activity, label: "Monitoring / Observability", note: "Continuous platform telemetry." },
-  { icon: HardDrive, label: "Backup / DR / Resilience", note: "Recoverable by design." },
-  { icon: History, label: "Version & Change Control", note: "Baseline-locked delivery." },
+  { icon: Lock, label: "Identity & Least Privilege", note: "Zero-trust access everywhere." },
+  {
+    icon: ShieldCheck,
+    label: "Privacy & Data Governance",
+    note: "Consent · data protection · classification.",
+  },
+  {
+    icon: Eye,
+    label: "Cybersecurity / Zero Trust",
+    note: "Threat detection · monitoring · incident response.",
+  },
+  { icon: ScrollText, label: "Auditability & Evidence", note: "Immutable logs · traceability." },
+  {
+    icon: Activity,
+    label: "Monitoring / Observability",
+    note: "Performance · availability · anomaly detection.",
+  },
+  {
+    icon: HardDrive,
+    label: "Backup / DR / Resilience",
+    note: "Disaster recovery · continuity · high availability.",
+  },
+  {
+    icon: History,
+    label: "Version & Change Control",
+    note: "Release mgmt · configuration · controlled baseline.",
+  },
+  {
+    icon: Scale,
+    label: "Legal, Regulatory & Standards",
+    note: "Multi-jurisdiction reporting · standards compliance.",
+  },
+  {
+    icon: BrainCircuit,
+    label: "Ethics & Responsible AI",
+    note: "Human oversight · explainability · bias monitoring.",
+  },
 ];
 
 /* Use-case library — derived from the wireframe's decision surfaces. */
@@ -814,7 +929,8 @@ function ArchitectureMap() {
         </div>
         <p className="e3-mono mt-4 text-[10px] leading-relaxed text-slate-500">
           Principles: modular boundaries · interoperable APIs · traceable data lineage ·
-          evidence-first measurement · security by design · resilient operations.
+          evidence-first measurement · security by design · resilient operations · scalable and
+          sustainable.
         </p>
       </section>
     </section>
