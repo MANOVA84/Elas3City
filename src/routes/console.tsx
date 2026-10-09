@@ -22,6 +22,32 @@ import {
   Target,
   LineChart,
   FileText,
+  Map,
+  Landmark,
+  Handshake,
+  KeyRound,
+  PlugZap,
+  GitBranch,
+  Bell,
+  Building2,
+  Cpu,
+  Radio,
+  Gauge,
+  Recycle,
+  Package,
+  Truck,
+  Cloud,
+  BarChart3,
+  Lock,
+  Eye,
+  HardDrive,
+  History,
+  Boxes,
+  BookOpen,
+  Activity,
+  Network,
+  FlaskConical,
+  Layers,
 } from "lucide-react";
 
 export const Route = createFileRoute("/console")({
@@ -58,6 +84,19 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    heading: "Architecture · Wireframe",
+    items: [
+      { id: "access", label: "Access & Actors", icon: Users, kind: "scroll" },
+      { id: "experience", label: "Experience Layer", icon: LayoutDashboard, kind: "scroll" },
+      { id: "platform", label: "Platform Services", icon: Layers, kind: "scroll" },
+      { id: "pillars", label: "Delivery Pillars", icon: Boxes, kind: "scroll" },
+      { id: "data-foundation", label: "Data Foundation", icon: Database, kind: "scroll" },
+      { id: "nexus", label: "NEXUS Intelligence", icon: Network, kind: "scroll" },
+      { id: "external", label: "External Systems", icon: PlugZap, kind: "scroll" },
+      { id: "controls", label: "Cross-Cutting Controls", icon: Lock, kind: "scroll" },
+    ],
+  },
+  {
     heading: "Delivery · 5 Phases",
     items: [
       { id: "foundation", label: "I · Foundation Locks", icon: ScrollText, kind: "scroll" },
@@ -68,8 +107,9 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    heading: "Control Towers",
+    heading: "Use Cases & Decisions",
     items: [
+      { id: "use-cases", label: "Use Case Library", icon: FileText, kind: "scroll" },
       { id: "tower-executive", label: "Executive", icon: Target, kind: "scroll" },
       { id: "tower-supply", label: "Supply Chain", icon: Factory, kind: "scroll" },
       { id: "tower-utilities", label: "Utilities", icon: Zap, kind: "scroll" },
@@ -128,8 +168,483 @@ const PHASES = [
     id: "advanced",
     title: "Advanced Features & Workflow Loop",
     desc: "Testing framework, performance optimization, advanced orchestration and 20-iteration integrated workflow loop.",
-    functions: ["testing-framework", "performance-optimization", "advanced-features", "workflow-loop"],
+    functions: [
+      "testing-framework",
+      "performance-optimization",
+      "advanced-features",
+      "workflow-loop",
+    ],
     status: "ACTIVE",
+  },
+];
+
+/* ── V4.0 wireframe: layered platform architecture ── */
+interface WireCard {
+  icon: LucideIcon;
+  label: string;
+  note: string;
+}
+
+interface WireGroup {
+  name: string;
+  icon: LucideIcon;
+  color: "emerald" | "sky" | "teal" | "amber" | "rose" | "violet";
+  items: WireCard[];
+}
+
+interface WireLayer {
+  id: string;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  color: string;
+  groups: WireGroup[];
+}
+
+const PILLAR_COLOR = {
+  emerald: "text-emerald-300 border-emerald-400/30 bg-emerald-400/10",
+  sky: "text-sky-300 border-sky-400/30 bg-sky-400/10",
+  teal: "text-teal-300 border-teal-400/30 bg-teal-400/10",
+  amber: "text-amber-300 border-amber-400/30 bg-amber-400/10",
+  rose: "text-rose-300 border-rose-400/30 bg-rose-400/10",
+  violet: "text-violet-300 border-violet-400/30 bg-violet-400/10",
+} as const;
+
+const WIRE_LAYERS: WireLayer[] = [
+  {
+    id: "access",
+    eyebrow: "Access",
+    title: "User & Organisation Access",
+    intro:
+      "Who can enter the platform. Government bodies, community pods & DAOs, partners & utilities, and assurance reviewers each reach only the surfaces their role permits.",
+    color: "text-slate-500",
+    groups: [
+      {
+        name: "Government & Organisations",
+        icon: Landmark,
+        color: "sky",
+        items: [
+          {
+            icon: Users,
+            label: "Ministries & agencies",
+            note: "Statutory leads accountable for reporting.",
+          },
+          {
+            icon: Building2,
+            label: "Municipal operators",
+            note: "City services & utility coordination.",
+          },
+        ],
+      },
+      {
+        name: "Community Pods & DAOs",
+        icon: Users,
+        color: "emerald",
+        items: [
+          { icon: Users, label: "Resident pods", note: "Neighbourhood-level inputs & feedback." },
+          {
+            icon: Network,
+            label: "DAO coordinators",
+            note: "Representative voting & attestation.",
+          },
+        ],
+      },
+      {
+        name: "Partners & Utilities",
+        icon: Handshake,
+        color: "teal",
+        items: [
+          { icon: Zap, label: "Utility partners", note: "Energy, water & telecom operators." },
+          { icon: Truck, label: "Logistics & suppliers", note: "Scope 3A / 3B event sources." },
+        ],
+      },
+      {
+        name: "Assurance & Reviewers",
+        icon: ShieldCheck,
+        color: "amber",
+        items: [
+          {
+            icon: FileCheck2,
+            label: "Assurance reviewers",
+            note: "Independent verification of evidence.",
+          },
+          { icon: Eye, label: "Auditors", note: "Read-mostly, fully lineage-tracked." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "experience",
+    eyebrow: "Experience",
+    title: "Experience Layer",
+    intro:
+      "The human surfaces: role-based portals & dashboards, workflow / approval / notification routing, GIS & spatial views, and report & evidence views.",
+    color: "text-slate-500",
+    groups: [
+      {
+        name: "Portals & Dashboards",
+        icon: LayoutDashboard,
+        color: "sky",
+        items: [
+          {
+            icon: LayoutDashboard,
+            label: "Role-based portals",
+            note: "Views scoped to each actor's remit.",
+          },
+          { icon: BarChart3, label: "Dashboards", note: "Command deck + tower KPIs." },
+        ],
+      },
+      {
+        name: "Workflow & Approvals",
+        icon: Workflow,
+        color: "emerald",
+        items: [
+          { icon: Workflow, label: "Workflows", note: "Event → decision → action routing." },
+          {
+            icon: Bell,
+            label: "Approvals & notifications",
+            note: "Authority sign-off before execution.",
+          },
+        ],
+      },
+      {
+        name: "GIS & Spatial Views",
+        icon: Map,
+        color: "teal",
+        items: [
+          { icon: Map, label: "Spatial views", note: "Assets & meters mapped to geography." },
+          { icon: Globe, label: "Public data overlay", note: "Context from open GIS layers." },
+        ],
+      },
+      {
+        name: "Reports & Evidence",
+        icon: FileText,
+        color: "amber",
+        items: [
+          { icon: FileText, label: "Reports", note: "BTR / SDG indicator outputs." },
+          { icon: ScrollText, label: "Evidence views", note: "Traceable, provenance-linked." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "platform",
+    eyebrow: "Platform",
+    title: "Shared Platform Services",
+    intro:
+      "The common service plane every tower consumes: identity / roles / policy, integration gateway, workflow & event services, ingestion & validation, evidence / audit / provenance, and notifications.",
+    color: "text-emerald-400",
+    groups: [
+      {
+        name: "Identity, Roles & Policy",
+        icon: KeyRound,
+        color: "rose",
+        items: [
+          { icon: Lock, label: "Least privilege", note: "Policy enforced at every boundary." },
+        ],
+      },
+      {
+        name: "Integration Gateway",
+        icon: PlugZap,
+        color: "sky",
+        items: [
+          { icon: GitBranch, label: "API & integration", note: "OpenAPI / AsyncAPI contracts." },
+        ],
+      },
+      {
+        name: "Workflow & Event Services",
+        icon: Workflow,
+        color: "emerald",
+        items: [
+          { icon: Activity, label: "Event bus", note: "Triggered, auditable orchestration." },
+        ],
+      },
+      {
+        name: "Ingestion & Validation",
+        icon: Database,
+        color: "teal",
+        items: [{ icon: ShieldCheck, label: "Quality gates", note: "Schema + confidence checks." }],
+      },
+      {
+        name: "Evidence, Audit & Provenance",
+        icon: ScrollText,
+        color: "amber",
+        items: [{ icon: FileCheck2, label: "Lineage", note: "Every number traceable to source." }],
+      },
+      {
+        name: "Notifications & Reporting",
+        icon: Bell,
+        color: "violet",
+        items: [{ icon: FileText, label: "Reporting", note: "Scheduled & event-driven outputs." }],
+      },
+    ],
+  },
+  {
+    id: "pillars",
+    eyebrow: "Pillars",
+    title: "Delivery Pillars — Supply Chain · Compute · Utilities",
+    intro:
+      "The three measured domains. Each pillar emits standardised events into the shared data foundation and is governed by the same NEXUS controls.",
+    color: "text-emerald-400",
+    groups: [
+      {
+        name: "Supply Chain",
+        icon: Factory,
+        color: "emerald",
+        items: [
+          { icon: Package, label: "Movable assets & inventory", note: "Tagged, traceable stock." },
+          {
+            icon: Truck,
+            label: "Supplier / logistics events",
+            note: "Fleet & shipment telemetry.",
+          },
+          {
+            icon: Recycle,
+            label: "Lifecycle, returns & recovery",
+            note: "Circular-flow tracking.",
+          },
+          { icon: Leaf, label: "Scope 3A / 3B", note: "Upstream & downstream emissions." },
+        ],
+      },
+      {
+        name: "Compute Resources",
+        icon: Cpu,
+        color: "sky",
+        items: [
+          { icon: Cloud, label: "Cloud / workload resources", note: "Usage & workload telemetry." },
+          { icon: Cpu, label: "Software & hardware lifecycle", note: "Refresh & decommissioning." },
+          {
+            icon: BarChart3,
+            label: "Usage, efficiency & cost",
+            note: "Right-sizing & spend per KPI.",
+          },
+          {
+            icon: HardDrive,
+            label: "E-waste & resource evidence",
+            note: "Disposal & recovery proof.",
+          },
+        ],
+      },
+      {
+        name: "Utilities",
+        icon: Zap,
+        color: "teal",
+        items: [
+          { icon: Zap, label: "Energy", note: "Consumption & carbon intensity." },
+          { icon: Droplets, label: "Water & sanitation", note: "Withdrawal & quality events." },
+          { icon: Radio, label: "Telecommunications", note: "Network & connectivity." },
+          {
+            icon: Gauge,
+            label: "Metering & consumption evidence",
+            note: "Metered, validated data.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "data-foundation",
+    eyebrow: "Foundation",
+    title: "Shared Data & Measurement Foundation",
+    intro:
+      "One canonical model and variable dictionary so a methodology maps cleanly to a variable, a KPI and its scope — with evidence quality and SDG mapping intact.",
+    color: "text-sky-400",
+    groups: [
+      {
+        name: "Canonical Model",
+        icon: Database,
+        color: "sky",
+        items: [{ icon: Boxes, label: "Canonical data & metadata", note: "Single agreed schema." }],
+      },
+      {
+        name: "Variable Dictionary",
+        icon: BookOpen,
+        color: "emerald",
+        items: [
+          { icon: FlaskConical, label: "MSVS", note: "Method → variable → KPI traceability." },
+        ],
+      },
+      {
+        name: "Scopes & Boundaries",
+        icon: Boxes,
+        color: "teal",
+        items: [
+          { icon: Layers, label: "Scopes & boundaries", note: "What is in and out of measure." },
+        ],
+      },
+      {
+        name: "Evidence Quality",
+        icon: BarChart3,
+        color: "amber",
+        items: [
+          { icon: Gauge, label: "Confidence scoring", note: "Quality grade per data point." },
+        ],
+      },
+      {
+        name: "SDG Mapping",
+        icon: Leaf,
+        color: "emerald",
+        items: [{ icon: Target, label: "Indicator mapping", note: "KPIs mapped to SDGs." }],
+      },
+    ],
+  },
+  {
+    id: "nexus",
+    eyebrow: "NEXUS",
+    title: "Governed Measurement & Intelligence Layer",
+    intro:
+      "NEXUS measures, explains, validates and proposes — but never independently authorises actions. Execution remains subject to ELAS identity, policy, evidence and approval controls.",
+    color: "text-violet-400",
+    groups: [
+      {
+        name: "Core Loop",
+        icon: FlaskConical,
+        color: "violet",
+        items: [
+          {
+            icon: Activity,
+            label: "Measure · Explain · Validate",
+            note: "Interpret the evidence.",
+          },
+          { icon: Network, label: "Interactions & synergies", note: "Cross-pillar trade-offs." },
+        ],
+      },
+      {
+        name: "Recommendations",
+        icon: Target,
+        color: "sky",
+        items: [
+          {
+            icon: BarChart3,
+            label: "Scenarios & recommendations",
+            note: "Costed, evidence-linked options.",
+          },
+          { icon: FileCheck2, label: "Evidence-linked outputs", note: "Each output is auditable." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "external",
+    eyebrow: "External",
+    title: "External Systems & Data Sources",
+    intro:
+      "Authoritative systems outside the boundary: ERP / WMS / TMS, utility meters, cloud telemetry, GIS / public data, and approved methodology sources.",
+    color: "text-teal-400",
+    groups: [
+      {
+        name: "Enterprise Systems",
+        icon: Building2,
+        color: "amber",
+        items: [
+          { icon: Truck, label: "ERP / WMS / TMS", note: "Financially-authoritative records." },
+        ],
+      },
+      {
+        name: "Meter Data",
+        icon: Gauge,
+        color: "teal",
+        items: [{ icon: Zap, label: "Utility & meter data", note: "Consumption at source." }],
+      },
+      {
+        name: "Cloud Telemetry",
+        icon: Cloud,
+        color: "sky",
+        items: [{ icon: Cpu, label: "Compute telemetry", note: "Workload & spend signals." }],
+      },
+      {
+        name: "GIS / Public Data",
+        icon: Map,
+        color: "emerald",
+        items: [{ icon: Globe, label: "Public datasets", note: "Open geospatial context." }],
+      },
+      {
+        name: "Methodology Sources",
+        icon: BookOpen,
+        color: "violet",
+        items: [
+          { icon: FlaskConical, label: "Approved methodologies", note: "Indicator provenance." },
+        ],
+      },
+    ],
+  },
+];
+
+const CONTROL_LIST = [
+  { icon: Lock, label: "Identity & Least Privilege", note: "Role-scoped access everywhere." },
+  { icon: ShieldCheck, label: "Privacy & Data Governance", note: "Lawful, minimised, consented." },
+  { icon: Eye, label: "Cybersecurity / Zero Trust", note: "Never trust, always verify." },
+  { icon: ScrollText, label: "Auditability & Evidence", note: "Immutable, traceable records." },
+  { icon: Activity, label: "Monitoring / Observability", note: "Continuous platform telemetry." },
+  { icon: HardDrive, label: "Backup / DR / Resilience", note: "Recoverable by design." },
+  { icon: History, label: "Version & Change Control", note: "Baseline-locked delivery." },
+];
+
+/* Use-case library — derived from the wireframe's decision surfaces. */
+interface UseCase {
+  id: string;
+  actor: string;
+  icon: LucideIcon;
+  title: string;
+  tower: string;
+  flow: string;
+  output: string;
+}
+
+const USE_CASES: UseCase[] = [
+  {
+    id: "uc-utility-variance",
+    actor: "Utility operator",
+    icon: Zap,
+    title: "Investigate an energy consumption variance",
+    tower: "Utilities",
+    flow: "Meter event → context → baseline state → change → significance",
+    output: "Diagnosis + evidence-linked recommendation",
+  },
+  {
+    id: "uc-scope3-intake",
+    actor: "Supplier / logistics",
+    icon: Truck,
+    title: "Ingest a shipment and close Scope 3A exposure",
+    tower: "Supply Chain",
+    flow: "Logistics event → validation → canonical variable → KPI",
+    output: "Scope 3A figure with full provenance",
+  },
+  {
+    id: "uc-compute-rightsize",
+    actor: "Platform engineer",
+    icon: Cpu,
+    title: "Right-size a workload to cut compute cost & e-waste",
+    tower: "Compute Resources",
+    flow: "Telemetry → scenario options → trade-offs → recommendation",
+    output: "Costed scenario awaiting authority approval",
+  },
+  {
+    id: "uc-approval-thread",
+    actor: "Executive / authority",
+    icon: ShieldCheck,
+    title: "Approve an intervention through the decision thread",
+    tower: "Governance",
+    flow: "Recommendation → evidence → authority → decision",
+    output: "Recorded, auditable decision on the ledger",
+  },
+  {
+    id: "uc-assurance-pack",
+    actor: "Assurance reviewer",
+    icon: FileCheck2,
+    title: "Assemble a BTR / SDG evidence pack",
+    tower: "Assurance",
+    flow: "KPI → evidence lineage → confidence score → report view",
+    output: "Verifiable report + evidence appendix",
+  },
+  {
+    id: "uc-community-signal",
+    actor: "Community pod / DAO",
+    icon: Users,
+    title: "Raise a community signal that enters the loop",
+    tower: "Experience",
+    flow: "Submission → GIS view → NEXUS triage → routed action",
+    output: "Tracked case with audit trail",
   },
 ];
 
@@ -188,15 +703,169 @@ function ConsolePage() {
         <main className="e3-scroll min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
           <CommandDeck email={email} onJump={scrollTo} />
           <BarbadosPanel />
+          <ArchitectureMap />
           {PHASES.map((phase) => (
             <PhaseSection key={phase.id} phase={phase} />
           ))}
+          <UseCaseLibrary />
           <TowerGrid />
           <AssurancePanels />
           <PageFooter />
         </main>
       </div>
     </div>
+  );
+}
+
+function ArchitectureMap() {
+  return (
+    <section id="architecture" className="mx-auto mt-10 max-w-6xl scroll-mt-20 space-y-3">
+      <section className="e3-card e3-glass p-5 sm:p-6">
+        <div className="e3-mono text-[10px] tracking-[0.28em] text-sky-400">
+          PLATFORM ARCHITECTURE · V4.0 WIREFRAME
+        </div>
+        <h2 className="mt-1 text-xl font-semibold text-slate-100 sm:text-2xl">
+          ELAS-3-CITY — layered platform architecture
+        </h2>
+        <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-slate-400">
+          Conceptual view for implementation discussion; the approved V4.0 controlled baseline
+          remains authoritative. Each layer below maps to the wireframe band it represents.
+        </p>
+      </section>
+
+      {WIRE_LAYERS.map((layer) => (
+        <section key={layer.id} id={layer.id} className="e3-card e3-glass scroll-mt-20 p-5">
+          <span className={`e3-mono text-[10px] uppercase tracking-[0.2em] ${layer.color}`}>
+            {layer.eyebrow}
+          </span>
+          <h3 className="mt-1 text-[17px] font-medium text-slate-100">{layer.title}</h3>
+          <p className="mt-1 max-w-3xl text-[12px] leading-relaxed text-slate-400">{layer.intro}</p>
+          <div
+            className={`mt-4 grid gap-3 ${
+              layer.groups.length <= 2
+                ? "grid-cols-1 sm:grid-cols-2"
+                : layer.groups.length === 3
+                  ? "grid-cols-1 md:grid-cols-3"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
+            {layer.groups.map((group) => {
+              const GroupIcon = group.icon;
+              const chip = PILLAR_COLOR[group.color];
+              return (
+                <div
+                  key={group.name}
+                  className="e3-glass-subtle rounded-lg border border-white/10 bg-white/5 p-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border ${chip}`}
+                    >
+                      <GroupIcon className="h-4 w-4" />
+                    </span>
+                    <span className="text-[12.5px] font-semibold text-slate-200">{group.name}</span>
+                  </div>
+                  <div className="mt-3 space-y-2">
+                    {group.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      return (
+                        <div key={item.label} className="flex items-start gap-2">
+                          <ItemIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+                          <div className="min-w-0">
+                            <div className="text-[12px] font-medium text-slate-300">
+                              {item.label}
+                            </div>
+                            <div className="text-[11px] leading-relaxed text-slate-500">
+                              {item.note}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+
+      <section id="controls" className="e3-card e3-glass scroll-mt-20 border-sky-400/20 p-5">
+        <div className="e3-mono text-[10px] uppercase tracking-[0.2em] text-sky-400">
+          Cross-cutting controls
+        </div>
+        <h3 className="mt-1 text-[17px] font-medium text-slate-100">Applied across every layer</h3>
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {CONTROL_LIST.map((c) => {
+            const Icon = c.icon;
+            return (
+              <div
+                key={c.label}
+                className="flex items-start gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2.5"
+              >
+                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
+                <div className="min-w-0">
+                  <div className="text-[12px] font-medium text-slate-200">{c.label}</div>
+                  <div className="text-[11px] leading-relaxed text-slate-500">{c.note}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p className="e3-mono mt-4 text-[10px] leading-relaxed text-slate-500">
+          Principles: modular boundaries · interoperable APIs · traceable data lineage ·
+          evidence-first measurement · security by design · resilient operations.
+        </p>
+      </section>
+    </section>
+  );
+}
+
+function UseCaseLibrary() {
+  return (
+    <section id="use-cases" className="mx-auto mt-10 max-w-6xl scroll-mt-20 space-y-4">
+      <header>
+        <div className="e3-mono text-[10px] tracking-[0.28em] text-slate-500">USE CASES · UC</div>
+        <h2 className="mt-1 text-xl font-semibold text-slate-100 sm:text-2xl">
+          Use-case library across the stack
+        </h2>
+        <p className="mt-1 max-w-2xl text-sm text-slate-400">
+          Each use case walks the wireframe flow — from an external event, through the governed
+          decision thread, to an evidence-linked output. NEXUS recommends; authority decides.
+        </p>
+      </header>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {USE_CASES.map((uc) => {
+          const Icon = uc.icon;
+          return (
+            <div key={uc.id} id={uc.id} className="e3-card e3-glass scroll-mt-20 p-4">
+              <div className="flex items-center gap-2">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-sky-400/30 bg-sky-400/10 text-sky-300">
+                  <Icon className="h-4 w-4" />
+                </span>
+                <span className="e3-mono text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500">
+                  {uc.tower}
+                </span>
+              </div>
+              <div className="mt-2 text-[13px] font-semibold leading-snug text-slate-100">
+                {uc.title}
+              </div>
+              <div className="e3-mono mt-1 text-[10px] text-slate-500">Actor: {uc.actor}</div>
+              <div className="mt-3 rounded-md border border-white/10 bg-white/5 px-3 py-2">
+                <div className="e3-mono text-[9px] uppercase tracking-[0.15em] text-slate-500">
+                  Flow
+                </div>
+                <p className="mt-0.5 text-[11.5px] leading-relaxed text-slate-300">{uc.flow}</p>
+              </div>
+              <div className="mt-2 flex items-center gap-1.5">
+                <FileCheck2 className="h-3.5 w-3.5 text-emerald-300" />
+                <span className="text-[11.5px] text-emerald-300">{uc.output}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -275,7 +944,9 @@ function ConsoleSidebar({
           E3
         </span>
         {!collapsed && (
-          <span className="text-sm font-bold uppercase tracking-wide text-slate-100">Elas3City</span>
+          <span className="text-sm font-bold uppercase tracking-wide text-slate-100">
+            Elas3City
+          </span>
         )}
       </Link>
       {!collapsed && (
@@ -414,8 +1085,18 @@ function Sparkline({ data, className }: { data: number[]; className?: string }) 
     .map((v, i) => `${(i / (data.length - 1)) * 100},${28 - ((v - min) / range) * 24}`)
     .join(" ");
   return (
-    <svg viewBox="0 0 100 28" preserveAspectRatio="none" className={`h-7 w-full ${className ?? ""}`}>
-      <polyline points={pts} fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+    <svg
+      viewBox="0 0 100 28"
+      preserveAspectRatio="none"
+      className={`h-7 w-full ${className ?? ""}`}
+    >
+      <polyline
+        points={pts}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   );
 }
@@ -454,8 +1135,8 @@ function CommandDeck({ email, onJump }: { email: string; onJump: (id: string) =>
         <p className="mt-3 max-w-[70ch] text-[14px] leading-relaxed text-slate-400">
           Signed in as <span className="e3-mono text-slate-200">{email || "…"}</span>. The complete
           five-phase platform build — data federation, KPI measurement, GHG Scope 3, governance,
-          NEXUS orchestration and the 20-iteration workflow loop. Architecture locks preserved
-          under R1_BASELINE.
+          NEXUS orchestration and the 20-iteration workflow loop. Architecture locks preserved under
+          R1_BASELINE.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
           {PHASES.map((p) => (
@@ -472,7 +1153,12 @@ function CommandDeck({ email, onJump }: { email: string; onJump: (id: string) =>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <GlassMetric label="Phases" value="5" sub="Foundation → Advanced" trend={[2, 3, 4, 5]} />
         <GlassMetric label="Edge functions" value="13" sub="All ACTIVE" trend={[9, 11, 12, 13]} />
-        <GlassMetric label="Architecture locks" value="953" sub="Section 2245" trend={[948, 950, 951, 953]} />
+        <GlassMetric
+          label="Architecture locks"
+          value="953"
+          sub="Section 2245"
+          trend={[948, 950, 951, 953]}
+        />
         <GlassMetric label="Compliance" value="100%" sub="R1 baseline" trend={[96, 98, 99, 100]} />
       </div>
     </section>
@@ -490,14 +1176,29 @@ function BarbadosPanel() {
           Barbados pilot — BTR readiness
         </h2>
         <p className="mt-1 max-w-2xl text-sm text-slate-400">
-          Pilot data feeds, CRT traceability and ETF reporting readiness. Populated from the
-          R1 handover workbooks; live Supabase tables land here next.
+          Pilot data feeds, CRT traceability and ETF reporting readiness. Populated from the R1
+          handover workbooks; live Supabase tables land here next.
         </p>
       </header>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <GlassMetric label="Pilot readiness" value="78%" sub="Target 100%" trend={[40, 55, 68, 78]} />
-        <GlassMetric label="Data sources mapped" value="34" sub="Target 41" trend={[12, 20, 28, 34]} />
-        <GlassMetric label="CRT traceability" value="91%" sub="Target 100%" trend={[60, 74, 84, 91]} />
+        <GlassMetric
+          label="Pilot readiness"
+          value="78%"
+          sub="Target 100%"
+          trend={[40, 55, 68, 78]}
+        />
+        <GlassMetric
+          label="Data sources mapped"
+          value="34"
+          sub="Target 41"
+          trend={[12, 20, 28, 34]}
+        />
+        <GlassMetric
+          label="CRT traceability"
+          value="91%"
+          sub="Target 100%"
+          trend={[60, 74, 84, 91]}
+        />
       </div>
       <div className="e3-card e3-glass-subtle p-4">
         <div className="e3-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
@@ -524,12 +1225,36 @@ function BarbadosPanel() {
 }
 
 const TOWERS = [
-  { id: "tower-executive", name: "Executive", question: "Are we on track, and what needs a decision today?" },
-  { id: "tower-supply", name: "Supply Chain", question: "Where is value leaking, and which intervention pays back fastest?" },
-  { id: "tower-utilities", name: "Utilities", question: "Energy and water flows — variance vs baseline?" },
-  { id: "tower-water", name: "Water & Compute", question: "Is compute keeping up with MRV ingestion?" },
-  { id: "tower-climate", name: "Climate / Nature", question: "GHG Scope 3 and ecosystem-service tracking — credible?" },
-  { id: "tower-risk", name: "Risk / Resilience", question: "What could break the pilot, and is it mitigated?" },
+  {
+    id: "tower-executive",
+    name: "Executive",
+    question: "Are we on track, and what needs a decision today?",
+  },
+  {
+    id: "tower-supply",
+    name: "Supply Chain",
+    question: "Where is value leaking, and which intervention pays back fastest?",
+  },
+  {
+    id: "tower-utilities",
+    name: "Utilities",
+    question: "Energy and water flows — variance vs baseline?",
+  },
+  {
+    id: "tower-water",
+    name: "Water & Compute",
+    question: "Is compute keeping up with MRV ingestion?",
+  },
+  {
+    id: "tower-climate",
+    name: "Climate / Nature",
+    question: "GHG Scope 3 and ecosystem-service tracking — credible?",
+  },
+  {
+    id: "tower-risk",
+    name: "Risk / Resilience",
+    question: "What could break the pilot, and is it mitigated?",
+  },
 ];
 
 function TowerGrid() {
@@ -573,9 +1298,24 @@ function AssurancePanels() {
           BTR-MRV verification state
         </h2>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <GlassMetric label="BTR records verified" value="1,208" sub="Target 1,400" trend={[600, 840, 1020, 1208]} />
-          <GlassMetric label="QA/QC pass rate" value="96%" sub="Target 98%" trend={[90, 92, 94, 96]} />
-          <GlassMetric label="Ingestion lag" value="42s" sub="Target <60s" trend={[120, 90, 61, 42]} />
+          <GlassMetric
+            label="BTR records verified"
+            value="1,208"
+            sub="Target 1,400"
+            trend={[600, 840, 1020, 1208]}
+          />
+          <GlassMetric
+            label="QA/QC pass rate"
+            value="96%"
+            sub="Target 98%"
+            trend={[90, 92, 94, 96]}
+          />
+          <GlassMetric
+            label="Ingestion lag"
+            value="42s"
+            sub="Target <60s"
+            trend={[120, 90, 61, 42]}
+          />
         </div>
       </section>
 
@@ -647,8 +1387,18 @@ function AssurancePanels() {
           PEOPLE & PARTNERS
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <GlassMetric label="Named recipients" value="12" sub="NDA-signed" trend={[4, 7, 10, 12]} />
-          <GlassMetric label="Institutional partners" value="6" sub="Barbados ecosystem" trend={[2, 3, 5, 6]} />
+          <GlassMetric
+            label="Named recipients"
+            value="12"
+            sub="NDA-signed"
+            trend={[4, 7, 10, 12]}
+          />
+          <GlassMetric
+            label="Institutional partners"
+            value="6"
+            sub="Barbados ecosystem"
+            trend={[2, 3, 5, 6]}
+          />
           <GlassMetric label="Authority roles" value="4" sub="Board / pilot / commercial / NEXUS" />
         </div>
       </section>
